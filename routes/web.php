@@ -15,8 +15,29 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/login', 'Auth\LoginController@showLoginForm');
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
+Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('/register', 'Auth\RegisterController@showRegistrationForm');
 Route::post('/register', 'Auth\RegisterController@register');
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm');
+
+Route::get('/userLogged', 'UserController@userLogged')->middleware('auth');
+Route::put('/user/changeState/{user}', 'UserController@changeState');
+
+Route::resource('course', 'CourseController', ['only'=>['update','store','destroy']]);
+
+Route::group(['prefix' => 'teacher'], function() {
+    
+    Route::get('/', 'TeacherController@index');
+    Route::get('/courses', 'TeacherController@coursesView');
+
+});
+
+Route::group(['prefix' => 'admin', 'middleware'=> ['auth'] ], function() {
+
+    Route::get('/', 'AdministratorController@teachers');
+    Route::get('/teacher', 'AdministratorController@teachers');
+    Route::get('/student', 'AdministratorController@students');
+
+});

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Teacher;
+use App\User;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -14,7 +15,19 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        return view('teacher.index');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all()
+    {
+        $teachers = User::whereHas('teachers')->orderBy('name')->get();
+
+        return response()->json($teachers);
     }
 
     /**
@@ -81,5 +94,23 @@ class TeacherController extends Controller
     public function destroy(Teacher $teacher)
     {
         //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Teacher  $teacher
+     * @return \Illuminate\Http\Response
+     */
+    public function coursesView()
+    {
+        return view('teacher.course');
+    }
+
+    public function courses(Teacher $teacher)
+    {
+        $courses = $teacher->courses()->get();
+
+        return response()->json($courses);
     }
 }

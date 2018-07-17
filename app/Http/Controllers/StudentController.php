@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Student;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,18 @@ class StudentController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all()
+    {
+        $students = User::whereHas('students')->orderBy('name')->get();
+
+        return response()->json($students);
     }
 
     /**

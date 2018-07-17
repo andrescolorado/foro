@@ -2,9 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
 class UserTableSeeders extends Seeder
 {
     /**
@@ -14,19 +11,26 @@ class UserTableSeeders extends Seeder
      */
     public function run()
     {
-    	$permissions = Permission::all();
-     	$roleRoot = Role::findByName('administrator');
-     	$roleRoot->syncPermissions($permissions);
 
         factory(App\User::class, 'admin', 1)->create()
-     	->each(function($admin){
-     		$admin->assignRole('administrator');
-     	});
+        ->each(function($user){
+            $user->administrators()->save(
+                new App\Administrator([
+                    'user_id'   =>  $user->id
+                ])
+            );
+        });
 
      	// 
-     	factory(App\User::class, 'user', 5)->create()
-     	->each(function($teacher){
-     		
-     	});
+     	$teachers = factory(App\Teacher::class, 10)->create();
+        $teachers->each(function($teacher){
+            $teacher->courses()->saveMany(
+                factory(App\Course::class, 5)->make()
+            );
+        });
+        // factory(App\Student::class, 20)->create()
+        // ->each(function($student){
+            
+        // });
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Administrator;
 use Illuminate\Http\Request;
 
+use Auth;
+
 class AdministratorController extends Controller
 {
     /**
@@ -14,7 +16,7 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        //
+        // return view('admin.index');
     }
 
     /**
@@ -81,5 +83,28 @@ class AdministratorController extends Controller
     public function destroy(Administrator $administrator)
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function teachers()
+    {
+        // dd(Auth::guard('web')->user());
+        // return response()->json(Au;
+
+        return view('admin.teachers');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function students()
+    {
+        return view('admin.students');
     }
 }

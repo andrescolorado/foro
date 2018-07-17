@@ -4,8 +4,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Course::class, function (Faker $faker) {
     return [
-        'name'			=>	$faker->tittle, 
+        'name'			=>	$faker->title, 
         'description'	=>	$faker->text, 
-        'teacher_id'	=>	factory(App\User::class)->create()->id
+        // 'teacher_id'	=>	factory(App\User::class, 'user')->create()->id
     ];
 });

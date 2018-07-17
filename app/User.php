@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'last_name', 'email', 'username', 'password', 'avatar'
+        'name', 'last_name', 'email', 'username', 'password', 'avatar', 'state'
     ];
 
     /**
@@ -62,5 +62,60 @@ class User extends Authenticatable
     public function administrators()
     {
         return $this->hasMany(Administrator::class, 'user_id');
+    }
+
+    /*
+    |-------------------------------------------------------------------------------
+    | QueryScope
+    |-------------------------------------------------------------------------------
+    |
+    */
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrName($q, $name)
+    {
+        if($name)
+            return $q->orWhere('name', 'like', "%{$name}%");
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrLastName($q, $last_name)
+    {
+        if($last_name)
+            return $q->orWhere('last_name', 'like', "%{$last_name}%");
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrEmail($q, $email)
+    {
+        if($email)
+            return $q->orWhere('email', 'like', "%{$email}%");
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrUsername($q, $username)
+    {
+        if($username)
+            return $q->orWhere('username', 'like', "%{$username}%");
     }
 }

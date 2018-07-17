@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use App\User;
 use App\Student;
 use App\Teacher;
+use App\Administrator;
 
 class RegisterController extends Controller
 {
@@ -112,7 +113,8 @@ class RegisterController extends Controller
             );
 
             $this->redirectTo = "/student";
-        }else
+        }
+        elseif($type == 'teacher')
         {
             $user->teachers()->save(
                 new Teacher([
@@ -120,6 +122,15 @@ class RegisterController extends Controller
                 ])
             );
             $this->redirectTo = "/teacher";
+        }
+        elseif($type == 'administrator')
+        {
+            $user->administrators()->save(
+                new Administrator([
+                    'user_id'   =>  $user->id
+                ])
+            );
+            $this->redirectTo = "/admin";
         }
     }
 

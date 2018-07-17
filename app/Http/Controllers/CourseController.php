@@ -34,8 +34,10 @@ class CourseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        if($request->ajax()){
+            return response()->json(Course::create($request->all()));
+        }
     }
 
     /**
@@ -69,7 +71,13 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        if($request->ajax())
+        {
+            $course->fill($request->all());
+            $course->update();
+
+            return response()->json($course);
+        }
     }
 
     /**
@@ -78,8 +86,13 @@ class CourseController extends Controller
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy(Request $request, Course $course)
     {
-        //
+        if($request->ajax())
+        {
+            $course->delete();
+            
+            return response()->json($course);
+        }
     }
 }

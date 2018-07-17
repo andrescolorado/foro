@@ -15,12 +15,10 @@ use Faker\Generator as Faker;
 
 $factory->defineAs(App\User::class, 'user', function (Faker $faker) {
 
-	$username = $faker->firstName;
-
     return [
-        'name'				=> 	$username,
+        'name'				=> 	$faker->firstName,
         'last_name'			=>	$faker->lastName,
-        'username'			=>	trim($username),
+        'username'			=>	$faker->unique()->userName,
         'email' 			=> 	$faker->unique()->safeEmail,
         'password' 			=> 	bcrypt('secret'),
         'remember_token'	=> 	str_random(10),
@@ -32,9 +30,10 @@ $factory->defineAs(App\User::class, 'admin', function (Faker $faker) {
     return [
         'name'				=>	'admin',
         'last_name'			=>	'',
-        'username'			=>	'admin'
+        'username'			=>	'admin',
         'email' 			=> 	'admin@unap.co',
         'password' 			=> 	bcrypt('admin'),
+        'state'             =>  true,
         'remember_token' 	=> 	str_random(10),
     ];
 });

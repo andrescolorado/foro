@@ -1,75 +1,86 @@
 <template>
-    <div class="container mx-auto h-full flex justify-center items-center pt-12">
-        <div class="w-1/3 mb-6">
-            <h1 class="font-hairline mb-6 text-center">Foro UNAP</h1>
+    <div class="mt-5">
+        <div class="w-50 m-auto shadow-sm bg-white">
+            <h1 class="pt-5 text-center">Foro UNAP</h1>
             <form action="" @submit.prevent="registerUser">
-	            <div class="border-teal p-8 border-t-4 bg-white mb-6 rounded-lg shadow">
+	            <div class="w-100 p-5 m-auto">
+                    <div class="form-row">
+    	                <div class="col form-group">
+    	                    <label class="">Nombres</label>
+    	                    <input type="text" class="form-control shadow" placeholder="Pepito" v-model="user.name">
+    	                    <p class="text-danger text-xs italic" v-show="errors.name.state">{{ errors.name.message }}</p>
+    	                </div>
+    	                
+    	                <div class="col form-group">
+    	                    <label class="">Apellidos</label>
+    	                    <input type="text" class="form-control shadow" placeholder="Perez" v-model="user.last_name">
+    	                    <p class="text-danger text-xs italic" v-show="errors.last_name.state">{{ errors.last_name.message }}</p>
+    	                </div>
+                    </div>
 	                
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Nombres</label>
-	                    <input type="text" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="Pepito" v-model="user.name">
-	                    <p class="text-red text-xs italic" v-show="errors.name.state">{{ errors.name.message }}</p>
-	                </div>
-	                
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Apellidos</label>
-	                    <input type="text" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="Perez" v-model="user.last_name">
-	                    <p class="text-red text-xs italic" v-show="errors.last_name.state">{{ errors.last_name.message }}</p>
-	                </div>
-	                
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Usuario</label>
-	                    <input type="text" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="pepito123" v-model="user.username">
-	                    <p class="text-red text-xs italic" v-show="errors.username.state">{{ errors.username.message }}</p>
-	                </div>
+                    <div class="form-row">
+    	                <div class="col form-group">
+    	                    <label class="">Usuario</label>
+    	                    <input type="text" class="form-control shadow" placeholder="pepito123" v-model="user.username">
+    	                    <p class="text-danger text-xs italic" v-show="errors.username.state">{{ errors.username.message }}</p>
+    	                </div>
 
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Tipo de usuario</label>
-	                    <select class="block w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" v-model="user.typeuser">
-	                    	<option value="student">Estudiante</option>
-	                    	<option value="teacher">Docente</option>
-	                    </select>
-	                    <p class="text-red text-xs italic" v-show="errors.typeuser.state">{{ errors.typeuser.message }}</p>
-	                </div>
+    	                <div class="col form-group">
+    	                    <label class="">Tipo de usuario</label>
+    	                    <select class="form-control shadow" v-model="user.typeuser">
+    	                    	<option value="administrator">Administrador</option>
+                                <option value="student">Estudiante</option>
+    	                    	<option value="teacher">Docente</option>
+    	                    </select>
+    	                    <p class="text-danger text-xs italic" v-show="errors.typeuser.state">{{ errors.typeuser.message }}</p>
+    	                </div>
+                    </div>
 	                
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Correo electronico</label>
-	                    <input type="text" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="pepito@ejemplo.com" v-model="user.email">
-	                    <p class="text-red text-xs italic" v-show="errors.email.state">{{ errors.email.message }}</p>
+	                <div class="form-group">
+	                    <label class="">Correo electronico</label>
+	                    <input type="text" class="form-control shadow" placeholder="pepito@ejemplo.com" v-model="user.email">
+	                    <p class="text-danger text-xs italic" v-show="errors.email.state">{{ errors.email.message }}</p>
 	                </div>
+                    
+                    <div class="form-row">
+    	                <div class="col form-group">
+    	                    <label class="">Contraseña</label>
+    	                    <input type="password" class="form-control shadow" placeholder="*********" v-model="user.password">
+    	                    <p class="text-danger text-xs italic" v-show="errors.password.state">{{ errors.password.message }}</p>
+    	                </div>
+    	                
+    	                <div class="col form-group">
+    	                    <label class="">Confirmar contraseña</label>
+    	                    <input type="password" class="form-control shadow" placeholder="*********" v-model="user.password_confirmation">
+    	                    <p class="text-danger text-xs italic" v-show="errors.password_confirmation.state">{{ errors.password_confirmation.message }}</p>
+    	                </div>
+                    </div>
 
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Contraseña</label>
-	                    <input type="password" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="*********" v-model="user.password">
-	                    <p class="text-red text-xs italic" v-show="errors.password.state">{{ errors.password.message }}</p>
-	                </div>
-	                
-	                <div class="mb-4">
-	                    <label class="font-bold text-grey-darker block mb-2">Confirmar contraseña</label>
-	                    <input type="password" class="block appearance-none w-full bg-white border 					state: false,
-	                    message:''border-grey-light hover:border-grey px-2 py-2 rounded shadow" placeholder="*********" v-model="user.password_confirmation">
-	                    <p class="text-red text-xs italic" v-show="errors.password_confirmation.state">{{ errors.password_confirmation.message }}</p>
-	                </div>
-
-	                <div class="flex items-center justify-between">
-	                    <button class="bg-teal-dark hover:bg-teal text-white py-2 px-4 rounded">
+	                <div class="">
+	                    <button class="btn btn-primary btn-block">
 	                        <span v-show="!isLoading">
 	                        	Registrarse
 	                        </span>
 	                        <loader v-bind:style="[styles]" v-show="isLoading"></loader>
 	                    </button>
 	                </div>  
+                    <div class="text-center">
+                        <p class="text-grey-dark text-sm">Ya tengo una cuenta? <a href="/login" class="no-underline text-blue font-bold">Iniciar sesión</a>.</p>
+                    </div>
 	            </div>
             </form>
-            <div class="text-center">
-                <p class="text-grey-dark text-sm">Ya tengo una cuenta? <a href="/login" class="no-underline text-blue font-bold">Registrarse</a>.</p>
-            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
+import Loader from '../shared/Loader.vue';
+
 export default {
+    components: {
+        'loader': Loader
+    },
     mounted() {
         console.log('Component mounted.')
     },
@@ -148,6 +159,7 @@ export default {
     			password_confirmation: this.user.password_confirmation
     		}).then(data => {
     			this.isLoading = false;
+                window.location.href = data.data.redirect;
     		}).catch(err => {
     			this.isLoading = false;
 
