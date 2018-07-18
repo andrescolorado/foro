@@ -1,8 +1,12 @@
 <template>
-	<div class="shadow card">
-		<div class="card-header bg-white">
-			<slot name="tittle"></slot>
-			<slot name="controls"></slot>
+	<div class="shadow-sm card mb-3">
+		<div class="card-header bg-white clearfix">
+			<div class="float-left">
+				<slot name="tittle"></slot>
+			</div>
+			<div class="float-right">
+				<slot name="controls"></slot>
+			</div>
 		</div>
 		<div class="card-body">
 			<slot name="body"></slot>

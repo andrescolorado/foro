@@ -27,4 +27,15 @@ class Student extends Model
     	return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Get relationship with teacher
+     *
+     * @return App\Course
+     */
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments')
+        ->withPivot('id', 'state', 'created_at', 'updated_at');
+    }
+
 }

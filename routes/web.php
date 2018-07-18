@@ -26,17 +26,22 @@ Route::get('/userLogged', 'UserController@userLogged')->middleware('auth');
 Route::put('/user/changeState/{user}', 'UserController@changeState');
 
 Route::resource('course', 'CourseController', ['only'=>['update','store','destroy']]);
+Route::resource('forum', 'ForumController', ['only'=>['update', 'store', 'destroy']]);
 
 Route::group(['prefix' => 'teacher'], function() {
     
     Route::get('/', 'TeacherController@index');
-    Route::get('/courses', 'TeacherController@coursesView');
+
+    Route::get('/courses', 'Teacher\CourseController@index');
+    Route::resource('course', 'Teacher\CourseController', ['except'=>'index']);
+    Route::put('course/{course}/updateEnrollment', 'Teacher\CourseController@updateEnrollment');
+
 
 });
 
 Route::group(['prefix' => 'admin', 'middleware'=> ['auth'] ], function() {
 
-    Route::get('/', 'AdministratorController@teachers');
+    Route::get('/', 'AdministratorController@teachers');	
     Route::get('/teacher', 'AdministratorController@teachers');
     Route::get('/student', 'AdministratorController@students');
 

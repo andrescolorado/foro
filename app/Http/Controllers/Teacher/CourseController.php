@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Teacher;
 
-use App\Teacher;
-use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class TeacherController extends Controller
+use App\Course;
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,19 +15,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('teacher.index');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function all()
-    {
-        $teachers = User::whereHas('teachers')->orderBy('name')->get();
-
-        return response()->json($teachers);
+        return view('teacher.course');
     }
 
     /**
@@ -48,27 +36,32 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->ajax())
+        {
+            return response()->json(
+                Course::create($request->all())
+            );
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Teacher $teacher)
+    public function show(Course $course)
     {
-        //
+        return view("teacher.course.show", compact('course'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Teacher $teacher)
+    public function edit($id)
     {
         //
     }
@@ -77,10 +70,10 @@ class TeacherController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -88,18 +81,23 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Teacher $teacher)
+    public function destroy($id)
     {
         //
     }
 
-    public function courses(Teacher $teacher)
+    public function updateEnrollment(Request $request, Course $course)
     {
-        $courses = $teacher->courses()->get();
+        if($request->ajax())
+        {
+            $course->students()->updateExistingPivot($request->student_id, [
+                'state' =>  $request->state
+            ]);
 
-        return response()->json($courses);
+            return response()->json($course);
+        }
     }
 }

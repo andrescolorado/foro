@@ -24,3 +24,7 @@ Route::get('/teachers', 'TeacherController@all');
 Route::get('/teacher/{teacher}/courses', 'TeacherController@courses');
 
 Route::get('/students', 'StudentController@all');
+
+Route::get('/course/{course}/students', 'Course\StudentController@index');
+Route::get('/course/{course}/searchStudent', 'Course\StudentController@search');
+Route::get('/course/{course}/forums', 'Course\ForumController@index');

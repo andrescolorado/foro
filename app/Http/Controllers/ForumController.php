@@ -34,8 +34,9 @@ class ForumController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        if($request->ajax())
+            return response()->json(Forum::create($request->all()));
     }
 
     /**

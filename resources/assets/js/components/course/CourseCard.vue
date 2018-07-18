@@ -2,7 +2,7 @@
 	<!-- <div class=""> -->
 		<div class="card text-center">
 			<div class="card-body">
-				<h5 v-show="!isEditing"><a href="">{{ course.name }}</a></h5>
+				<h5 v-show="!isEditing"><a :href="getLink">{{ course.name }}</a></h5>
 				<div v-show="isEditing">
 					<div class="d-flex">
 						<input type="text" ref="courseName" v-model="course.name" class="form-control w-75 mr-1" style="font-size: 1.125rem;">
@@ -47,7 +47,7 @@ export default{
 
 	},
 	props: {
-		course:null
+		course:null,
 	},
 	data: function(){
 		return {
@@ -99,6 +99,9 @@ export default{
                 width: 20 + 'px',
                 height: 20 + 'px'
             };
+        },
+        getLink: function(){
+        	return "course/"+this.course.id;
         }
 	}
 }

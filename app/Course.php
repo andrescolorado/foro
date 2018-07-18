@@ -36,4 +36,15 @@ class Course extends Model
     {
         return $this->hasMany(Forum::class, 'course_id');
     }
+
+    /**
+     * Get relationship with teacher
+     *
+     * @return App\Student
+     */
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'enrollments')
+        ->withPivot('id','state', 'created_at', 'updated_at');
+    }
 }
