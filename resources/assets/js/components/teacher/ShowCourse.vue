@@ -2,7 +2,13 @@
 	<div class="">
 		<navbar></navbar>
 		<div class="container">
-			<course :course="course"></course>
+			<course 
+				:course="course" 
+				:controlsForum="true" 
+				:controlsSttudents="true"
+				:showPanelForum="true"
+				:createForum="true">
+			</course>
 		</div>
 	</div>
 </template>

@@ -98,8 +98,11 @@ class TeacherController extends Controller
 
     public function courses(Teacher $teacher)
     {
-        $courses = $teacher->courses()->get();
+        return view('teacher.course');
+    }
 
-        return response()->json($courses);
+    public function forums()
+    {
+        return view('teacher.forums');   
     }
 }

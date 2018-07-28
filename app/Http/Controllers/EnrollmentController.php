@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Enrollment;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,22 @@ class EnrollmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->ajax())
+        {
+            sleep(1);
+            
+            $user = User::findOrFail($request->user_id);
+            $student = $user->students()->first();
+
+            $student->courses()->attach(
+                $request->course_id,
+                [
+                    'state' => false
+                ]
+            );
+
+            return response()->json($student);
+        }
     }
 
     /**
@@ -81,5 +97,30 @@ class EnrollmentController extends Controller
     public function destroy(Enrollment $enrollment)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createComment(Request $request)
+    {
+        if($request->ajax())
+        {
+            $enrollment = Enrollment::findOrFail($request->enrollment_id);
+            $enrollment->forums()->attach(
+                $request->forum_id,
+                [
+                    'parent'    => 0,
+                    'comment'   =>  $request->comment
+                ]
+            );
+
+            return response()->json([
+                'state' =>  true
+            ]);
+        }
     }
 }

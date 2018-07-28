@@ -106,8 +106,7 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
 
         $url = $this->getUrlByRole();
-
-        return response()->json([
+            return response()->json([
             'status'     =>  true,
             'redirect'  =>  $url,
             'user'      =>  Auth::user()
@@ -142,13 +141,22 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function logout(Request $request)
+    public function logout(Request $request, $url = '/')
     {
         // dd($request->all());
         $this->guard()->logout();
 
         $request->session()->invalidate();
 
-        return $this->loggedOut($request) ?: redirect('/');
+        return $this->loggedOut($request) ?: redirect($url);
+    }
+
+    public function inactive(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect($url);
     }
 }

@@ -47,7 +47,7 @@ class ForumController extends Controller
      */
     public function show(Forum $forum)
     {
-        //
+        return response()->json($forum);
     }
 
     /**
@@ -70,7 +70,13 @@ class ForumController extends Controller
      */
     public function update(Request $request, Forum $forum)
     {
-        //
+        if($request->ajax())
+        {
+            $forum->fill($request->all());
+            $forum->update();
+
+            return response()->json($forum);
+        }
     }
 
     /**
@@ -81,6 +87,9 @@ class ForumController extends Controller
      */
     public function destroy(Forum $forum)
     {
-        //
+        if($request->ajax())
+        {
+            return response()->json($forum->delete());
+        }
     }
 }

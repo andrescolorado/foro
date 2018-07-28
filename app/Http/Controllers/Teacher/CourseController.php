@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Teacher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\User;
 use App\Course;
+use App\Teacher;
 class CourseController extends Controller
 {
     /**
@@ -13,9 +15,13 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('teacher.course');
+    public function index(User $user)
+    {   
+        $teacher = $user->teachers()->first();
+
+        $courses = $teacher->courses()->get();
+
+        return response()->json($courses);
     }
 
     /**

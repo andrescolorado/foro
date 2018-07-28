@@ -22,15 +22,11 @@ class UserTableSeeders extends Seeder
         });
 
      	// 
-     	$teachers = factory(App\Teacher::class, 10)->create();
+     	$teachers = factory(App\Teacher::class, 5)->create();
         $teachers->each(function($teacher){
             $teacher->courses()->saveMany(
-                factory(App\Course::class, 5)->make()
+                factory(App\Course::class, 1)->make()
             );
         });
-        // factory(App\Student::class, 20)->create()
-        // ->each(function($student){
-            
-        // });
     }
 }

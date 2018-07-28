@@ -17,6 +17,7 @@ class ForumController extends Controller
     public function index(Course $course)
     {
         $forums = $course->forums()
+        ->with('comments.student.user')
         ->orderBy('id', 'DESC')
         ->get();
 

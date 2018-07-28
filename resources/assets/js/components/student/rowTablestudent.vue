@@ -19,14 +19,16 @@
 			</span>
 		</td>
 		<td>
-			<a v-if="!student.state" href="" class="btn btn-sm btn-primary" @click.prevent="changeState(student.id, 1)" title="Activar">
-				<font-awesome-icon icon="check" v-show="!isLoading" />
-				<loader v-bind:style="[styles]" v-show="isLoading"></loader>
-			</a>
-			<a v-if="student.state" href="" class="btn btn-sm btn-danger" @click.prevent="changeState(student.id, 0)" title="Desactivar">
-				<font-awesome-icon icon="window-close" v-show="!isLoading" />
-				<loader v-bind:style="[styles]" v-show="isLoading"></loader>
-			</a>
+			<div class="">
+				<a v-if="!student.state" href="" class="btn btn-sm btn-primary" @click.prevent="changeState(student.id, 1)" title="Activar">
+					<font-awesome-icon icon="check" v-show="!isLoading" />
+					<loader v-bind:style="[styles]" v-show="isLoading"></loader>
+				</a>
+				<a v-if="student.state" href="" class="btn btn-sm btn-danger" @click.prevent="changeState(student.id, 0)" title="Desactivar">
+					<font-awesome-icon icon="window-close" v-show="!isLoading" />
+					<loader v-bind:style="[styles]" v-show="isLoading"></loader>
+				</a>
+			</div>
 		</td>
 	</tr>
 </template>
@@ -38,7 +40,8 @@ export default{
 		Loader
 	},
 	props:{
-		student: null
+		student: null,
+		controls:false,
 	},
 	mounted(){
 

@@ -11,6 +11,13 @@
                         <input type="text" class="form-control shadow-sm" placeholder="Nombre del foro" v-model="forum.name">
                     </div>
                     <div class="form-group">
+                        <label class="">Estado</label>
+                        <select name="" id="" class="form-control" v-model="forum.state">
+                        	<option value="1">Abierto</option>
+                        	<option value="0">Cerrado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="">Descripción (opcional)</label>
                         <textarea class="form-control" v-model="forum.description"></textarea>
                     </div>
@@ -49,7 +56,8 @@ export default{
 			isLoading: false,
 			forum:{
 				name:null,
-				description:null
+				description:null,
+				state:null
 			}
 		}
 	},
@@ -60,6 +68,7 @@ export default{
 			axios.post("/forum", {
 				name: this.forum.name,
 				description: this.forum.description,
+				state: this.forum.state,
 				course_id:this.course.id
 			})
 			.then(resp => {

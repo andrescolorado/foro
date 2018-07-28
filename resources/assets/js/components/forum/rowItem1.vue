@@ -11,18 +11,20 @@
 					:class="(forum.state) ? 'badge-success' : 'badge-danger'">
 					{{ (forum.state) ? 'Abierto' : 'Cerrado' }}
 				</span>
-				<div class="d-inline forum_content_controls position-absolute">
+				<div class="d-inline forum_content_controls position-absolute" v-if="controls">
 					<transition-group name="fade">
 						<button 
 							class="btn btn-sm btn-primary mr-1" 
 							v-show="theControlAreVisible"
-							key="edit">
+							key="edit"
+							 @click.prevent="edit">
 							<font-awesome-icon icon="edit"></font-awesome-icon>
 						</button>
 						<button 
 							class="btn btn-sm btn-danger" 
 							v-show="theControlAreVisible"
-							key="delete">
+							key="delete"
+							@click.prevent="deleteForum">
 							<font-awesome-icon icon="trash"></font-awesome-icon>
 						</button>
 					</transition-group>
@@ -36,14 +38,14 @@
 			</a>
 		</div>
 		<div class="forum_count_comments text-center m-auto">
-			<h4>6</h4>
+			<h4>{{ countComments() }}</h4>
 			<span>Comentarios</span>
 		</div>
 		<div class="forum_last_comment text-center d-flex m-auto">
-			<img src="http://via.placeholder.com/75x75" alt="" class="forum_picture_last_comment rounded-circle" width="50" height="50">
-			<div class="text-left ml-3">
-				<span class="forum_last_comment_date d-block">17 jun 2018</span>
-				<span class="forum_last_comment_user d-block">user12</span>
+			<img src="http://via.placeholder.com/75x75" v-show="countComments() > 0" alt="" class="forum_picture_last_comment rounded-circle" width="50" height="50">
+			<div class="text-left ml-3" v-show="countComments() > 0">
+				<span class="forum_last_comment_date d-block">{{ lastComment.date }}</span>
+				<span class="forum_last_comment_user d-block">{{ lastComment.user }}</span>
 			</div>
 		</div>
 	</div>
@@ -72,28 +74,59 @@
 </style>
 <script>
 export default{	
+	components:{
+		
+	},
+	mounted: function(){
+		this.getUserLastComment();
+	},
 	props:{
 		forum:null,
+		role:'',
+		controls:false
 	},
 	data: function(){
 		return {
 			theControlAreVisible:false,
+			lastComment: {
+				user:null,
+				date:null
+			}
 		}
 	},
 	methods:{
 		getDate: function(date){
 			return moment(date).fromNow();
 		},
+		countComments: function(){
+			return (this.forum.comments == null) ? 0 :this.forum.comments.length;
+		},
+		getUserLastComment: function(){
+			let total = this.countComments();
+			let lComment = (total == 0) ? null : this.forum.comments[total - 1];
+			let user = (typeof lComment == 'undefined' || lComment == null) ? null : lComment.student.user;
+			let name = (user == null) ? '': user.name;
+			let last_name = (user == null) ? '': user.last_name;
+
+			this.lastComment.user = name+" "+last_name;
+			this.lastComment.date = (typeof lComment == 'undefined' || lComment == null) ? null : this.getDate(lComment.pivot.created_at);
+		},
 		showControls: function(){
 			this.theControlAreVisible = true
 		},
 		hideControls: function(){
 			this.theControlAreVisible = false
+		},
+		edit: function(){
+			this.$emit('editForum', this.forum)
+		},
+		deleteForum: function(){
+			this.$emit('deleteForum', this.forum)	
 		}
 	},
 	computed:{
 		link: function(){
-			return "../course/"+this.forum.course_id+"/forum/"+this.forum.id;
+			return "/"+this.role+"/course/"+this.forum.course_id+"/forum/"+this.forum.id;
 		}
 	}
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
-
 use Auth;
 
 class UserController extends Controller
@@ -90,6 +90,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function userRole()
+    {
+        $user = Auth::user();
+        $role = '';
+
+        if(count($user->administrators) == 1 )
+            $role = 'admin';
+
+        if(count($user->teachers) == 1 )
+            $role = 'teacher';
+
+        if(count($user->students) == 1 )
+            $role = 'student';
+
+        return response()->json($role);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
         //
@@ -102,9 +125,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        if($request->ajax())
+        {
+            $user->fill($request->all());
+            $user->password = bcrypt($request->password);
+            $user->update();
+            
+            return response()->json($user);
+        }
     }
 
     /**
@@ -131,5 +161,62 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkPasssword(Request $request)
+    {
+        $user = Auth::user();
+
+        if (Hash::check('admin', $user->password)) {
+            
+            return response()->json([
+                'state' => false,
+                'changePassword'    => true
+            ]);
+        }
+
+        return response()->json([
+            'state' => true,
+            'changePassword'    => false
+        ]);
+    } 
+
+    public function changePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password'  =>  'required'
+        ],
+        [
+            'password.required' =>  'La contraseña es requerida'
+        ]);
+
+        if($request->ajax())
+        {
+            $user->password = bcrypt($request->password);
+            $user->update();
+
+            return response()->json([
+                'state' =>  true
+            ]);
+        }
+    }
+
+    public function isActive(Request $request)
+    {
+        $user = Auth::user();
+
+        if($user->state)
+            return response()->json([
+                'state' => true
+            ]);
+
+        return response()->json([
+            'state' => false
+        ]);
+    }
+
+    public function inactive(Request $request)
+    {
+        return view('inactive');
     }
 }

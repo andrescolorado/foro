@@ -41,7 +41,8 @@ export default{
 		navbar
 	},
 	mounted: function(){
-		this.getUserLogged()
+		this.getUserLogged();
+		this.isActive();
 	},
 	data: function(){
 		return {
@@ -55,6 +56,20 @@ export default{
 			axios.get("/userLogged")
 			.then(resp =>{
 				this.userLogged = resp.data;
+				this.$emit('logged', this.userLogged);
+			})
+			.catch(err =>{
+				console.log(err)
+			});
+		},
+		isActive: function(){
+			axios.get("/activeStatus")
+			.then(resp =>{
+				let state = resp.data.state;
+
+				if(!state){
+					window.location.href = "/inactive"
+				}
 			})
 			.catch(err =>{
 				console.log(err)
@@ -66,6 +81,5 @@ export default{
 			return this.userLogged.name+' '+this.userLogged.last_name;
 		}
 	}
-
 }
 </script>

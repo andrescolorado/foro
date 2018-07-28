@@ -15,7 +15,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        return View('student.index');
     }
 
     /**
@@ -94,5 +94,25 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function courses()
+    {
+        return View('student.course.index');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function forums()
+    {
+        return View('student.forum.index');
     }
 }

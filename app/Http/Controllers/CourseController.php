@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Forum;
+use App\User;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -36,7 +38,15 @@ class CourseController extends Controller
     public function store(Request $request)
     {   
         if($request->ajax()){
-            return response()->json(Course::create($request->all()));
+            $user = User::findOrFail($request->user_id);
+            $user->teachers()->first()->courses()->create([
+                'name'  =>  $request->name,
+                'description'   =>  $request->description
+            ]);
+
+            return response()->json([
+                'state' =>  'Ok'
+            ]);
         }
     }
 
@@ -94,5 +104,19 @@ class CourseController extends Controller
             
             return response()->json($course);
         }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Course  $course
+     * @param  \App\Forum  $forum
+     * @return \Illuminate\Http\Response
+     */
+    public function forum(Course $course, Forum $forum)
+    {
+        return view('teacher.course.forum')
+        ->with('course', $course)
+        ->with('forum', $forum);
     }
 }

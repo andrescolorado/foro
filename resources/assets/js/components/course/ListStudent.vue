@@ -14,7 +14,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<row-table-student v-for="student in students" :key="student.id" :student="student" :course="course">
+					<row-table-student v-for="student in students" :key="student.id" :student="student" :course="course" :controls="controls">
 						
 					</row-table-student>
 				</tbody>
@@ -30,7 +30,8 @@ export default{
 		rowTableStudent
 	},
 	props:{
-		course:null
+		course:null,
+		controls:false,
 	},
 	mounted: function(){
 		this.getStudents()

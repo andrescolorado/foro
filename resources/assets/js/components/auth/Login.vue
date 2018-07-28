@@ -2,22 +2,27 @@
     <div class="mt-5">
         <div class="w-50 m-auto shadow-sm bg-white">
             <h1 class="pt-5 text-center">Foro UNAP</h1>
+            <div class="w-75 m-auto">
+                <div class="alert alert-danger" role="alert" v-show="isError">
+                    {{ msgErrorLogin }}
+                </div>
+            </div>
             <form action="" @submit.prevent="login">
-                <div class="w-75 p-5 m-auto">
+                <div class="w-75 px-3 m-auto">
                     <div class="form-group">
                         <label class="">Usuario</label>
-                        <input type="text" class="form-control shadow-sm" placeholder="pepito@ejemplo.com" v-model="user.username">
+                        <input type="text" class="form-control shadow" placeholder="pepito@ejemplo.com" v-model="user.username">
                     </div>
 
                     <div class="form-group">
                         <label class="">Contraseña</label>
-                        <input type="password" class="form-control shadow-sm" placeholder="*********" v-model="user.password">
+                        <input type="password" class="form-control shadow" placeholder="*********" v-model="user.password">
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <button class="btn btn-primary btn-block">
-                            <span v-show="!isLoading">
-                                Iniciar sesión
+                    <div class="flex items-center justify-between pb-3">
+                        <button class="btn btn-primary btn-block d-flex justify-content-center shadow-sm mb-1">
+                            <span class="mr-1">
+                                {{ textButtonLogin }}
                             </span>
                             <loader v-bind:style="[styles]" v-show="isLoading"></loader>
                         </button>
@@ -49,7 +54,8 @@ export default {
         return {
             isLoading: false,
             isError: false,
-
+            msgErrorLogin:'',
+            textButtonLogin: 'Iniciar Sesión',
             user:{
                 username:'',
                 password:''
@@ -70,6 +76,7 @@ export default {
         login: function(){
 
             this.isLoading = true;
+            this.textButtonLogin = 'Iniciando..';
 
             axios.post('/login', {
                 username: this.user.username,
@@ -77,10 +84,17 @@ export default {
             }).then(data => {
                 this.isLoading = false;
                 window.location.href = data.data.redirect;
+                this.textButtonLogin = 'Un momento por favor.'
                 console.log(data)
             }).catch(err => {
                 this.isLoading = false;
-                console.log(err)
+                this.textButtonLogin = 'Iniciar Sesión';
+                
+                let errors = err.response
+                
+                this.isError = !errors.data.status;
+                this.msgErrorLogin = errors.data.message;
+                console.log(errors)
             });
         }
     },

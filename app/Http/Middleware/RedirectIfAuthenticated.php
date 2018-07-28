@@ -29,7 +29,6 @@ class RedirectIfAuthenticated
 
             if(count($user->students) == 1 )
                 return redirect('/student'); 
-            // return redirect('/home');
         }
 
         return $next($request);

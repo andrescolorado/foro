@@ -3,7 +3,7 @@
         <div class="w-50 m-auto shadow-sm bg-white">
             <h1 class="pt-5 text-center">Foro UNAP</h1>
             <form action="" @submit.prevent="registerUser">
-	            <div class="w-100 p-5 m-auto">
+	            <div class="w-100 px-5 m-auto">
                     <div class="form-row">
     	                <div class="col form-group">
     	                    <label class="">Nombres</label>
@@ -28,7 +28,7 @@
     	                <div class="col form-group">
     	                    <label class="">Tipo de usuario</label>
     	                    <select class="form-control shadow" v-model="user.typeuser">
-    	                    	<option value="administrator">Administrador</option>
+    	                    	<!-- <option value="administrator">Administrador</option> -->
                                 <option value="student">Estudiante</option>
     	                    	<option value="teacher">Docente</option>
     	                    </select>
@@ -56,17 +56,17 @@
     	                </div>
                     </div>
 
-	                <div class="">
-	                    <button class="btn btn-primary btn-block">
-	                        <span v-show="!isLoading">
-	                        	Registrarse
+	                <div class="pb-3">
+	                    <button class="btn btn-primary btn-block d-flex justify-content-center shadow-sm mb-1">
+	                        <span class="mr-1">
+	                        	{{ textRegister }}
 	                        </span>
 	                        <loader v-bind:style="[styles]" v-show="isLoading"></loader>
 	                    </button>
+                        <div class="text-center">
+                            <p class="text-grey-dark text-sm">Ya tengo una cuenta? <a href="/login" class="no-underline text-blue font-bold">Iniciar sesión</a>.</p>
+                        </div>
 	                </div>  
-                    <div class="text-center">
-                        <p class="text-grey-dark text-sm">Ya tengo una cuenta? <a href="/login" class="no-underline text-blue font-bold">Iniciar sesión</a>.</p>
-                    </div>
 	            </div>
             </form>
             
@@ -88,6 +88,7 @@ export default {
     	return {
     		isLoading: false,
     		isError: false,
+            textRegister: 'Registarse',
     		user: {
     			name:'',
     			last_name:'',
@@ -148,6 +149,7 @@ export default {
     	registerUser: function(){
     		this.clearData()
     		this.isLoading = true;
+            this.textRegister = 'Registrando';
     		
     		axios.post('/register', {
     			name: this.user.name,
@@ -160,8 +162,10 @@ export default {
     		}).then(data => {
     			this.isLoading = false;
                 window.location.href = data.data.redirect;
+                this.textRegister = 'Un momento por favor';
     		}).catch(err => {
     			this.isLoading = false;
+                this.textRegister = 'Registarse';
 
     			let errors = err.response
 

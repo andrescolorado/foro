@@ -15,9 +15,19 @@
 			</div>
 			<div class="p-2 clearfix">
 				<p class="card-text float-left">
-					<small class="text-muted">{{ course.created_at }}</small>
+					<small class="text-muted">Creado {{ getDate(course.created_at) }}</small>
 				</p>
-				<div class="float-right">
+				<div class="">
+					<button 
+						class="btn btn-primary btn-block d-flex justify-content-center" v-if="buttonEnrollment"
+						@click="createEnrollment">
+						<span class="mr-1">
+							{{ txtEnrollment }}
+						</span>
+						<loader v-bind:style="[styles]" v-show="isLoading"></loader>
+					</button>
+				</div>
+				<div class="float-right" v-if="controlsCrud">
 					<button 
 						class="btn bg-white p-1 dropdown-toggle text-muted"
 						type="button" 
@@ -27,10 +37,19 @@
 					    <font-awesome-icon icon="ellipsis-h"></font-awesome-icon>
 					</button>
 					<div class="dropdown-menu" :aria-labelledby="course.id">
-					    <a class="dropdown-item" href="#" @click.prevent="edit">Editar</a>
-					    <a class="dropdown-item" href="#" @click.prevent="deleteCourse">Eliminar</a>
-					</div>
-					
+					    <a 
+					    	class="dropdown-item" 
+					    	href="#" 
+					    	@click.prevent="edit">
+					    	Editar
+					   	</a>
+					    <a 
+					    	class="dropdown-item" 
+					    	href="#" 
+					    	@click.prevent="deleteCourse">
+					    	Eliminar
+					    </a>
+					</div>	
 				</div>
 			</div>
 		</div>
@@ -48,11 +67,16 @@ export default{
 	},
 	props: {
 		course:null,
+		controlsCrud:false,
+		buttonEnrollment:false,
+		user:null
 	},
 	data: function(){
 		return {
 			isEditing: false,
-			isLoading: false
+			isLoading: false,
+
+			txtEnrollment: 'Matricular',
 		}
 	},
 	methods: {
@@ -86,6 +110,31 @@ export default{
 			.catch(err => {
 				console.log(err)
 			})
+		},
+		createEnrollment: function(){
+
+			this.isLoading = true;
+			this.txtEnrollment = 'Matriculando';
+
+			axios.post("/enrollment", {
+				user_id: this.user.id,
+				course_id: this.course.id
+			})
+			.then(resp => {
+				this.isLoading = false;
+				this.txtEnrollment = 'Matriculado ';
+				this.$emit('enrollmentCreated', this.course);
+				console.log(resp.data);
+			})
+			.catch(err => {
+				this.isLoading = false;
+				this.txtEnrollment = 'Matricular';
+				console.log(resp.data);
+			});
+
+		},
+		getDate: function(date){
+			return moment(date).fromNow();
 		}
 	},
 	computed: {

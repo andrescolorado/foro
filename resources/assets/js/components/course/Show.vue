@@ -23,18 +23,21 @@
 				<h5>Estudiantes</h5>
 			</template>
 			<template slot="body">
-				<students :course="course"></students>
+				<students :course="course" :controls="controlsSttudents"></students>
 			</template>
 		</panel>
-		<panel>
+		<panel v-if="showPanelForum">
 			<template slot="tittle">
 				<h5>Foros</h5>
 			</template>
-			<template slot="controls">
+			<template slot="controls" v-if="createForum">
 				<button class="btn btn-sm btn-primary" @click.prevent="changeStateModalCreateForum">Nuevo Foro</button>
 			</template>
 			<template slot="body">
-				<forums :course="course"></forums>
+				<forums 
+					:course="course" 
+					:controlsForum="controlsForum">
+				</forums>
 			</template>
 		</panel>
 		<create-forum :stateModal="isOpenModal" :course="course" @cancel="changeStateModalCreateForum"></create-forum>
@@ -52,7 +55,11 @@ export default{
 		panel, students, createForum, forums
 	},
 	props:{
-		course:null
+		course:null,
+		controlsForum:false,
+		controlsSttudents:false,
+		showPanelForum:false,
+		createForum:false	
 	},
 	data: function(){
 		return {

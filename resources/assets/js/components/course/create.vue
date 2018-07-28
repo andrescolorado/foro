@@ -60,7 +60,7 @@ export default{
 			axios.post("/course", {
 				name: this.course.name,
 				description: this.course.description,
-				teacher_id:this.teacher.id
+				user_id:this.teacher.id
 			})
 			.then(resp => {
 				this.isLoading = false;

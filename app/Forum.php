@@ -31,4 +31,15 @@ class Forum extends Model
     {
         return $this->belongsTo(Course::class, 'course_id');
     }
+
+    /**
+     * Get relationship with Enrollment
+     *
+     * @return App\Enrollment
+     */
+    public function comments()
+    {
+        return $this->belongsToMany(Enrollment::class, 'comment_forums', 'forum_id', 'enrollment_id')
+        ->withPivot('id', 'parent', 'comment', 'created_at', 'updated_at');
+    }
 }

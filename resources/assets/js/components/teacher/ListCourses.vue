@@ -1,6 +1,6 @@
 <template>
 	<div class="">
-		<navbar-teacher></navbar-teacher>
+		<navbar-teacher @logged="setUser"></navbar-teacher>
 		<div class="container">
 			<panel>
 				<template slot="tittle">
@@ -15,12 +15,23 @@
 				<template slot="body">
 					<input type="text" class="form-control">
 					<div class="card-columns mt-3">
-						<course-card v-for="course in courses" :key="course.id" :course="course" @deleted="getCourses(teacher.id)"></course-card>
+						<course-card 
+							v-for="course in courses" 
+							:key="course.id" 
+							:course="course" 
+							@deleted="getCourses(teacher.id)"
+							:controlsCrud="true">
+							</course-card>
 					</div>
 				</template>
 			</panel>	
 		</div>
-		<create-course :stateModal="openModal" :teacher="teacher" @cancel="changeStateModal" @created="getCourses(teacher.id)"></create-course>
+		<create-course 
+			:stateModal="openModal" 
+			:teacher="teacher" 
+			@cancel="changeStateModal" 
+			@created="getCourses()">
+		</create-course>
 	</div>
 </template>
 
@@ -35,7 +46,7 @@ import createCourse from '../course/create'
 			panel, NavbarTeacher, courseCard, createCourse
 		},
 		mounted: function(){
-			this.getUserLogged()
+			
 		},
 		data: function(){
 			return {
@@ -50,20 +61,15 @@ import createCourse from '../course/create'
 			}
 		},
 		methods:{
-			getUserLogged: function(){
-				axios.get("/userLogged")
-				.then(resp =>{
-					this.teacher = resp.data
-					this.getCourses(this.teacher.id)
-				})
-				.catch(err =>{
-					console.log(err)
-				});
+			setUser: function(user){
+				this.teacher = user;
+
+				this.getCourses();
 			},
-			getCourses: function(teacher){
+			getCourses: function(){
 				this.isLoading = true;
 
-				axios.get("/api/teacher/"+teacher+"/courses")
+				axios.get("/api/teacher/"+this.teacher.id+"/courses")
 				.then(resp => {
 					this.isLoading = false;
 					this.courses = resp.data;

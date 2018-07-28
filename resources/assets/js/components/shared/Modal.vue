@@ -47,7 +47,7 @@
 	    overflow-y: initial !important
 	}
 	.modal-body{
-	    height: 450px;
+	    /*height: 450px;*/
 	    overflow-y: auto;
 	}
 
